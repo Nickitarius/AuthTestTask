@@ -1,3 +1,5 @@
 <?php
-$title = 'Gay Sex';
+
+$page_title = 'Home';
+
 require 'index.view.php';
