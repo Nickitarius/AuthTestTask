@@ -1,4 +1,4 @@
-import { checkPasswords } from "./password.validation.js";
+import { checkPasswords } from "./password.validation.util.js";
 
 //RFC 5322 email regex
 const emailValidationRegex =

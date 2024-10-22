@@ -1,29 +1,67 @@
 <?php
 
 const PAGE_TITLE = 'Регистрация';
+
 $request_method = strtoupper($_SERVER['REQUEST_METHOD']);
 
-$errors = [];
-$inputs = [];
+//Latin characters or digits, first character is always a letter, 1-20 chars.
+const USERNAME_VALIDATION_REGEX = "/^[a-zA-Z][A-Za-z0-9]{0,19}$/";
 
 if ($request_method == 'GET') {
     require 'signup.view.php';
 } elseif ($request_method == 'POST') {
-    if (filter_has_var(INPUT_POST, 'username')) {
+    $errors = [];
+    $inputs = [];
+
+    //Username validation
+    if (filter_has_var(INPUT_POST, 'username') && !empty($_POST['username'])) {
         $username = htmlspecialchars($_POST['username']);
-
-        $usernameValidationRegex = "/^[a-zA-Z][A-Za-z0-9]{0,19}$/";
-        echo "<div class='caution'>Name is $username</div>";
-        if (preg_match($usernameValidationRegex, $username)) {
-
+        $username = trim($username);
+        if (!preg_match(USERNAME_VALIDATION_REGEX, $username)) {
+            $errors['username'] = 'Логин может содержать только латинские символы и
+            цифры и иметь длину от 1 до 20 символов!';
         }
+    } else {
+        $errors['username'] = 'Логин не может быть пустым!';
     }
 
+    //Email validation
+    if (filter_has_var(INPUT_POST, 'email') && !empty($_POST['email'])) {
+        $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
+        $email = strtolower($email);
+        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $errors['email'] = 'Электронная почта введена некорректно!';
+        }
+    } else {
+        $errors['email'] = 'Электронная почта не может быть пустой!';
+    }
+
+    $isPasswordExists = filter_has_var(INPUT_POST, 'password') && !empty($_POST['password']);
+    $isRepeatPasswordExists = filter_has_var(INPUT_POST, 'repeat-password') && !empty($_POST['repeat-password']);
+
+    //Passwords validation
+    if ($isPasswordExists && $isRepeatPasswordExists) {
+        $password = htmlspecialchars($_POST['password']);
+        $repeatPassword = htmlspecialchars(string: $_POST['repeat-password']);
+        if ($password === $repeatPassword) {
+            if (preg_match("/^[A-Za-z0-9]*$/", $password)) {
+                if (mb_strlen($password) < 8 || mb_strlen($password) > 20) {
+                    $errors['password'] = 'Пароль должен быть не менее 8 и не более 20 символов!';
+                }
+            } else {
+                $errors['password'] = 'Пароль должен содержать только латинские символы и цифры!';
+            }
+        } else {
+            $errors['password'] = 'Пароли не совпадают!';
+        }
+    } else {
+        $errors['password'] = 'Пароль должен быть не менее 8 и не более 20 символов!';
+    }
 
     // If errors are present, return the form
     if (count($errors) > 0) {
-        require 'signup.php';
+        require 'signup.view.php';
+    } else {
+        require 'subscribe.php';
     }
-
-    require 'subscribe.php';
 }

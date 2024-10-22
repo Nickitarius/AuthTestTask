@@ -9,7 +9,7 @@ export function checkPasswords(
   // const passwordValidationregex = /^[A-Za-z0-9]{8,20}/;
   let errorMessage = "";
   if (password.value === repeatPassword.value) {
-    if (password.value.length >= 8) {
+    if (password.value.length >= 8 && password.value.length < 20) {
       if (/^[A-Za-z0-9]*$/.test(password.value)) {
         password.setCustomValidity("");
         repeatPassword.setCustomValidity("");
@@ -22,13 +22,14 @@ export function checkPasswords(
     } else {
       password.setCustomValidity("invalid");
       repeatPassword.setCustomValidity("invalid");
-      errorMessage = "Пароль должен быть не менее 8 символов!";
+      errorMessage = "Пароль должен быть не менее 8 и не более 20 символов!";
     }
   } else {
     password.setCustomValidity("invalid");
     repeatPassword.setCustomValidity("invalid");
     errorMessage = "Пароли не совпадают!";
   }
+
   if (passwordError && repeatPasswordError) {
     passwordError.innerHTML = errorMessage;
     repeatPasswordError.innerHTML = errorMessage;
