@@ -1,13 +1,42 @@
-<?php
+<?php require_once '../src/controllers/subscribe.controller.php'; ?>
 
-const PAGE_TITLE = 'Subscribe';
+<?php view('header', ['pageTitle' => 'Регистрация']) ?>
 
-require 'subscribe.view.php';
+<div>
 
-// $request_method = strtoupper($_SERVER['REQUEST_METHOD']);
+    <?php echo htmlspecialchars($_SESSION['username']); ?>
+    <p><?php
+    if (isset($_SESSION['username'])) {
+        echo htmlspecialchars($_SESSION['username']);
+    } else {
+        echo 'ERROR NAME';
+    } ?></p>
 
-// if ($request_method == 'GET') {
-//     require 'subscribe.view.php';
-// } elseif ($request_method == 'POST') {
-//     require 'subscribe.php';
-// }
+    <p><?php
+    if (filter_has_var(INPUT_POST, 'username')) {
+        echo htmlspecialchars($_SESSION['username']);
+    } else {
+        echo 'no user';
+    } ?></p>
+
+    <p><?php
+    if (isset($_SESSION['email'])) {
+        echo htmlspecialchars($email);
+    } else {
+        echo 'ERROR EMAIL';
+    } ?></p>
+
+    <?php
+    $passwordHash = $_SESSION['password_hash'];
+    echo $passwordHash; ?>
+
+    <p>Password is verified:
+        <?php $pass = "12345678";
+        echo password_verify($pass, $passwordHash);
+
+        echo $_SESSION['flash_message']; ?>
+    </p>
+
+</div>
+
+<?php view('footer'); ?>

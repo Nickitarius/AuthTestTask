@@ -12,7 +12,7 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
 
-    <title><?= PAGE_TITLE ?></title>
+    <title><?= $pageTitle ?? 'Test app' ?></title>
 </head>
 
 <body class="bg-body-tertiary">
@@ -29,20 +29,18 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
-
-                <!-- <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                        <li class="nav-item">
-                            <span class="nav-link">GOY</span>
-                        </li>
-                        <li class="nav-item">
-                            <span class="nav-link">DA</span>
-                        </li>
-                    </ul> -->
-                <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                    <!-- <li class="nav-item">
+                        <span class="nav-link">GOY</span>
+                    </li>
+                    <li class="nav-item">
+                        <span class="nav-link">DA</span>
+                    </li> -->
+                </ul>
 
                 <div class="d-flex align-items-end ">
-                    <a href="/login.php" class="btn btn-outline-light p-2 me-2">Войти</a>
-                    <a href="/signup.php" class="btn btn-outline-warning p-2">Зарегистрироваться</a>
+                    <a href="/login" class="btn btn-outline-light p-2 me-2">Войти</a>
+                    <a href="/signup" class="btn btn-outline-warning p-2">Зарегистрироваться</a>
                 </div>
 
             </div>
@@ -51,3 +49,17 @@
     </nav>
 
     <main class="container pb-5 mb-5">
+
+        <?php if (isset($_SESSION['flash_message'])): ?>
+            <?php
+            $flashText = $_SESSION['flash_message']['text'];
+            $flashType = $_SESSION['flash_message']['type'];
+            $isShowFlash = true;
+
+            unset($_SESSION['flash_message']);
+            ?>
+
+            <div class="alert alert-<?php echo $flashType; ?>" id="flash-message" role="alert">
+                <?php echo $flashText; ?>
+            </div>
+        <?php endif; ?>

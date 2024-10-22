@@ -1,67 +1,108 @@
-<?php
+<?php require_once '../src/controllers/signup.controller.php'; ?>
 
-const PAGE_TITLE = 'Регистрация';
+<?php view('header', ['pageTitle' => 'Регистрация']) ?>
 
-$request_method = strtoupper($_SERVER['REQUEST_METHOD']);
+<div class="row justify-content-md-center">
 
-//Latin characters or digits, first character is always a letter, 1-20 chars.
-const USERNAME_VALIDATION_REGEX = "/^[a-zA-Z][A-Za-z0-9]{0,19}$/";
+    <div class="col col-sm-4">
+        <div class="card bg-color-body">
 
-if ($request_method == 'GET') {
-    require 'signup.view.php';
-} elseif ($request_method == 'POST') {
-    $errors = [];
-    $inputs = [];
+            <div class="card-header">
+                Форма регистрации.
+            </div>
 
-    //Username validation
-    if (filter_has_var(INPUT_POST, 'username') && !empty($_POST['username'])) {
-        $username = htmlspecialchars($_POST['username']);
-        $username = trim($username);
-        if (!preg_match(USERNAME_VALIDATION_REGEX, $username)) {
-            $errors['username'] = 'Логин может содержать только латинские символы и
-            цифры и иметь длину от 1 до 20 символов!';
-        }
-    } else {
-        $errors['username'] = 'Логин не может быть пустым!';
-    }
+            <form class="vstack gap-3 p-4 needs-validation" id="signup-form" action="signup.php" method="post"
+                novalidate>
+                <?php
+                // Read inputs and errors from previous submission attempt.
+                $errors = [];
+                $inputs = [];
 
-    //Email validation
-    if (filter_has_var(INPUT_POST, 'email') && !empty($_POST['email'])) {
-        $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
-        $email = strtolower($email);
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-            $errors['email'] = 'Электронная почта введена некорректно!';
-        }
-    } else {
-        $errors['email'] = 'Электронная почта не может быть пустой!';
-    }
-
-    $isPasswordExists = filter_has_var(INPUT_POST, 'password') && !empty($_POST['password']);
-    $isRepeatPasswordExists = filter_has_var(INPUT_POST, 'repeat-password') && !empty($_POST['repeat-password']);
-
-    //Passwords validation
-    if ($isPasswordExists && $isRepeatPasswordExists) {
-        $password = htmlspecialchars($_POST['password']);
-        $repeatPassword = htmlspecialchars(string: $_POST['repeat-password']);
-        if ($password === $repeatPassword) {
-            if (preg_match("/^[A-Za-z0-9]*$/", $password)) {
-                if (mb_strlen($password) < 8 || mb_strlen($password) > 20) {
-                    $errors['password'] = 'Пароль должен быть не менее 8 и не более 20 символов!';
+                if (isset($_SESSION['errors'])) {
+                    $errors = $_SESSION['errors'];
+                    unset($_SESSION['errors']);
                 }
-            } else {
-                $errors['password'] = 'Пароль должен содержать только латинские символы и цифры!';
-            }
-        } else {
-            $errors['password'] = 'Пароли не совпадают!';
-        }
-    } else {
-        $errors['password'] = 'Пароль должен быть не менее 8 и не более 20 символов!';
-    }
+                if (isset($_SESSION['inputs'])) {
+                    $inputs = $_SESSION['inputs'];
+                    unset($_SESSION['inputs']);
+                }
+                ?>
 
-    // If errors are present, return the form
-    if (count($errors) > 0) {
-        require 'signup.view.php';
-    } else {
-        require 'subscribe.php';
-    }
-}
+                <div>
+                    <?php
+                    $usernameClass = empty($errors['username']) ? '' : ' is-invalid';
+                    $usernameValue = empty($inputs['username']) ? '' : $inputs['username'];
+                    $usernameError = empty($errors['username']) ?
+                        "Логин может содержать только латинские символы и цифры и иметь длину от 1 до 20 символов!"
+                        : $errors['username'];
+                    ?>
+
+                    <label for="username">Логин:</label>
+                    <input type="text" name="username" id="username" required="required" placeholder="Введите логин"
+                        class="form-control <?php echo $usernameClass; ?>" value="<?php echo $usernameValue; ?>"
+                        pattern="^[a-zA-Z][A-Za-z0-9]{0,19}$" />
+                    <div class="invalid-feedback" id="username-error">
+                        <?php echo $usernameError ?>
+                    </div>
+                </div>
+
+                <div>
+                    <?php
+                    $emailClass = empty($errors['email']) ? '' : ' is-invalid';
+                    $emailValue = empty($inputs['email']) ? '' : $inputs['email'];
+                    $emailError = empty($errors['email']) ? '' : $errors['email'];
+                    ?>
+
+                    <label for="email">Электронная почта:</label>
+                    <input type="email" name="email" id="email" required="required" placeholder="email@example.com"
+                        class="form-control <?php echo $emailClass; ?>" value="<?php echo $emailValue; ?>" />
+                    <div class="invalid-feedback" id="email-error">
+                        <?php echo $emailError; ?>
+                    </div>
+                </div>
+
+                <div>
+                    <?php
+                    $passwordClass = empty($errors['password']) ? '' : ' is-invalid';
+                    $passwordError = empty($errors['password']) ? '' : $errors['password'];
+                    ?>
+
+                    <label for="password">Пароль*:</label>
+                    <input type="password" name="password" id="password" required="required" minlength="8"
+                        pattern="^[A-Za-z0-9]{8,20}$" placeholder="Введите пароль"
+                        class="form-control <?php echo $passwordClass; ?>" />
+                    <div class="invalid-feedback" id="password-error">
+                        <?php echo $passwordError; ?>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="repeat-password">Повторите пароль*:</label>
+                    <input type="password" name="repeat-password" id="repeat-password" required="required" minlength="8"
+                        pattern="^[A-Za-z0-9]{8,20}$" placeholder="Повторите пароль"
+                        class="form-control <?php echo $passwordClass; ?>" />
+                    <div class="invalid-feedback" id="repeat-password-error">
+                        <?php echo $passwordError; ?>
+                    </div>
+                </div>
+
+                <div>
+                    <small class="text-secondary">*Пароль должен содержать только латинские символы и цифры. Пароль
+                        должен быть не менее 8 символов.</small>
+                </div>
+
+                <div class="container text-center">
+                    <button type="submit" class="btn btn-primary w-100 mt-3">Sign up</button>
+                </div>
+
+            </form>
+
+        </div>
+
+    </div>
+
+</div>
+
+<!-- <script src="js/signup.validation.js" type="module"></script> -->
+
+<?php view('footer'); ?>

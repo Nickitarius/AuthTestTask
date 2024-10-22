@@ -1,3 +1,8 @@
-<?php
+<?php require_once '../src/controllers/login.controller.php'; ?>
 
-const PAGE_TITLE = 'Вход';
+<?php view('header', ['pageTitle' => 'Вход']) ?>
+
+
+
+
+<?php view('footer'); ?>

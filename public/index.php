@@ -1,5 +1,11 @@
-<?php
+<?php require_once '../src/controllers/index.controller.php'; ?>
 
-const PAGE_TITLE = 'Главная';
+<?php view('header', ['pageTitle' => 'Главная']) ?>
 
-require 'index.view.php';
+<div class="container">
+
+    <h2>Hello</h2>
+
+</div>
+
+<?php view('footer', ) ?>
