@@ -2,8 +2,8 @@
 
 <div>
     <p><?php
-    if (isset($_POST['name'])) {
-        echo htmlspecialchars($_POST['name']);
+    if (isset($_POST['username'])) {
+        echo htmlspecialchars($_POST['username']);
     } else {
         echo 'ERROR NAME';
     } ?></p>

@@ -1,5 +1,5 @@
 <?php
 
-$page_title = 'Home';
+const PAGE_TITLE = 'Главная';
 
 require 'index.view.php';

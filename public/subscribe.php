@@ -1,6 +1,6 @@
 <?php
 
-$page_title = 'Subscribe';
+const PAGE_TITLE = 'Subscribe';
 
 require 'subscribe.view.php';
 

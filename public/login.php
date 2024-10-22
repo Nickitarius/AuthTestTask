@@ -1,3 +1,3 @@
 <?php
 
-$page_title = 'Log in';
+const PAGE_TITLE = 'Вход';

@@ -12,42 +12,42 @@
         integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
         crossorigin="anonymous"></script>
 
-    <title><?= $page_title ?></title>
+    <title><?= PAGE_TITLE ?></title>
 </head>
 
 <body class="bg-body-tertiary">
 
-        <nav class="navbar navbar-expand-lg bg-dark text-bg-dark sticky-top border-bottom mb-5 py-3"
-            data-bs-theme="dark">
-            <div class="container">
+    <nav class="navbar navbar-expand-lg bg-dark text-bg-dark sticky-top border-bottom mb-5 py-3" data-bs-theme="dark">
+        <div class="container">
 
-                <a class="navbar-brand" href="/">Test App</a>
+            <a class="navbar-brand" href="/">Test App</a>
 
-                <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
-                    data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
-                    aria-expanded="false" aria-label="Toggle navigation">
-                    <span class="navbar-toggler-icon"></span>
-                </button>
+            <button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+                data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false"
+                aria-label="Toggle navigation">
+                <span class="navbar-toggler-icon"></span>
+            </button>
 
-                <div class="collapse navbar-collapse" id="navbarSupportedContent">
+            <div class="collapse navbar-collapse" id="navbarSupportedContent">
 
-                    <ul class="navbar-nav me-auto mb-2 mb-lg-0">
+                <!-- <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                         <li class="nav-item">
                             <span class="nav-link">GOY</span>
                         </li>
                         <li class="nav-item">
                             <span class="nav-link">DA</span>
                         </li>
-                    </ul>
+                    </ul> -->
+                <ul class="navbar-nav me-auto mb-2 mb-lg-0"></ul>
 
-                    <div class="d-flex">
-                        <a href="/login.php" class="btn btn-outline-light p-2 me-2">Log in</a>
-                        <a href="/signup.php" class="btn btn-outline-warning p-2">Sign up</a>
-                    </div>
-
+                <div class="d-flex align-items-end ">
+                    <a href="/login.php" class="btn btn-outline-light p-2 me-2">Войти</a>
+                    <a href="/signup.php" class="btn btn-outline-warning p-2">Зарегистрироваться</a>
                 </div>
+
             </div>
+        </div>
 
-        </nav>
+    </nav>
 
-        <main class="container pb-5 mb-5">
+    <main class="container pb-5 mb-5">
