@@ -38,10 +38,25 @@
                     </li> -->
                 </ul>
 
-                <div class="d-flex align-items-end ">
-                    <a href="/login" class="btn btn-outline-light p-2 me-2">Войти</a>
-                    <a href="/signup" class="btn btn-outline-warning p-2">Зарегистрироваться</a>
-                </div>
+                <?php if (isLoggedIn()): ?>
+
+                    <div class="d-flex align-items-end ">
+                        <span href="/signup" class="navbar-text p-2">
+                            <?php echo 'Здравствуйте, ' . currentUsername() ?>
+                        </span>
+                        <a href="/logout" class="btn btn-outline-danger p-2 me-2">Выйти</a>
+                    </div>
+
+
+                <?php else: ?>
+
+                    <div class="d-flex align-items-end ">
+                        <a href="/login" class="btn btn-outline-light p-2 me-2">Войти</a>
+                        <a href="/signup" class="btn btn-outline-warning p-2">Зарегистрироваться</a>
+                    </div>
+
+                <?php endif; ?>
+
 
             </div>
         </div>
@@ -54,8 +69,6 @@
             <?php
             $flashText = $_SESSION['flash_message']['text'];
             $flashType = $_SESSION['flash_message']['type'];
-            $isShowFlash = true;
-
             unset($_SESSION['flash_message']);
             ?>
 

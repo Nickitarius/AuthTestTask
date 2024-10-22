@@ -28,11 +28,11 @@ class UserActions
 
     }
 
-    public static function isUsernameExists($username): bool
+    public static function getUserByUsername($username)
     {
         try {
             global $db;
-            $query = "SELECT COUNT(*) as total
+            $query = "SELECT *
                 FROM users
                 WHERE username = :username";
             $statement = $db->prepare($query);
@@ -41,10 +41,10 @@ class UserActions
             $statement->execute();
             $res = $statement->fetch(PDO::FETCH_ASSOC);
 
-            // return $res;
-            return $res['total'] > 0;
+            return $res;
+            // return $res['total'] > 0;
         } catch (Exception $e) {
-            return false;
+            return [];
         }
     }
 
@@ -68,5 +68,10 @@ class UserActions
         } catch (Exception $e) {
             return false;
         }
+    }
+
+    public static function getUserByUsernameAndPassword($username, $password)
+    {
+
     }
 }

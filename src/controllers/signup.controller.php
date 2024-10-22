@@ -17,11 +17,11 @@ if ($request_method == 'POST') {
         $username = htmlspecialchars($_POST['username']);
         $username = trim($username);
         if (preg_match(USERNAME_VALIDATION_REGEX, $username)) {
-            $isUsernameExists = UserActions::isUsernameExists($username);
-            $_SESSION['uf'] = $isUsernameExists;
-
-            if ($isUsernameExists) {
+            $user = UserActions::getUserByUsername($username);
+            if (!empty($user)) {
                 $errors['username'] = 'Имя пользователя занято!';
+            } else {
+                $errors['username'] = '';
             }
         } else {
             $errors['username'] = 'Логин может содержать только латинские символы и
@@ -41,6 +41,8 @@ if ($request_method == 'POST') {
             $isEmailExists = UserActions::isEmailExists($email);
             if ($isEmailExists) {
                 $errors['email'] = 'Эта электронная почта уже занята!';
+            } else {
+                $errors['email'] = '';
             }
         } else {
             $errors['email'] = 'Электронная почта введена некорректно!';
@@ -61,6 +63,8 @@ if ($request_method == 'POST') {
             if (preg_match("/^[A-Za-z0-9]*$/", $password)) {
                 if (mb_strlen($password) < 8 || mb_strlen($password) > 20) {
                     $errors['password'] = 'Пароль должен быть не менее 8 и не более 20 символов!';
+                } else {
+                    $errors['password'] = '';
                 }
             } else {
                 $errors['password'] = 'Пароль должен содержать только латинские символы и цифры!';
@@ -81,13 +85,12 @@ if ($request_method == 'POST') {
         exit;
     } else {
         //Register the new user
-
         $isSignupSuccess = UserActions::register_user($email, $username, $password);
         if ($isSignupSuccess) {
             $_SESSION['flash_message']['text'] = 'Регистрация прошла успешно!';
             $_SESSION['flash_message']['type'] = 'success';
 
-            header('Location:' . 'subscribe');
+            header('Location:' . 'login');
             exit;
         } else {
             $_SESSION['flash_message']['text'] = "Что-то пошло не так! Обратитесь к разработчику!";
@@ -99,7 +102,5 @@ if ($request_method == 'POST') {
             header('Location:' . 'signup');
             exit;
         }
-
-
     }
 }

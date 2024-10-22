@@ -26,8 +26,6 @@
                     $inputs = $_SESSION['inputs'];
                     unset($_SESSION['inputs']);
                 }
-
-                print_r($_SESSION['uf']);
                 ?>
 
                 <div>
@@ -42,7 +40,7 @@
                     <label for="username">Логин:</label>
                     <input type="text" name="username" id="username" required="required" placeholder="Введите логин"
                         class="form-control <?php echo $usernameClass; ?>" value="<?php echo $usernameValue; ?>"
-                        pattern="^[a-zA-Z][A-Za-z0-9]{0,19}$" />
+                        pattern="^[a-zA-Z][A-Za-z0-9]{0,19}$" minlength="2" maxlength="20" />
                     <div class="invalid-feedback" id="username-error">
                         <?php echo $usernameError ?>
                     </div>
@@ -71,7 +69,7 @@
 
                     <label for="password">Пароль*:</label>
                     <input type="password" name="password" id="password" required="required" minlength="8"
-                        pattern="^[A-Za-z0-9]{8,20}$" placeholder="Введите пароль"
+                        maxlength="20" pattern="^[A-Za-z0-9]{8,20}$" placeholder="Введите пароль"
                         class="form-control <?php echo $passwordClass; ?>" />
                     <div class="invalid-feedback" id="password-error">
                         <?php echo $passwordError; ?>
@@ -81,7 +79,7 @@
                 <div>
                     <label for="repeat-password">Повторите пароль*:</label>
                     <input type="password" name="repeat-password" id="repeat-password" required="required" minlength="8"
-                        pattern="^[A-Za-z0-9]{8,20}$" placeholder="Повторите пароль"
+                        maxlength="20" pattern="^[A-Za-z0-9]{8,20}$" placeholder="Повторите пароль"
                         class="form-control <?php echo $passwordClass; ?>" />
                     <div class="invalid-feedback" id="repeat-password-error">
                         <?php echo $passwordError; ?>
@@ -94,7 +92,7 @@
                 </div>
 
                 <div class="container text-center">
-                    <button type="submit" class="btn btn-primary w-100 mt-3">Sign up</button>
+                    <button type="submit" class="btn btn-primary w-100 mt-3">Создать учётную запись</button>
                 </div>
 
             </form>
@@ -105,6 +103,6 @@
 
 </div>
 
-<!-- <script src="js/signup.validation.js" type="module"></script> -->
+<script src="js/signup.validation.js" type="module"></script>
 
 <?php view('footer'); ?>

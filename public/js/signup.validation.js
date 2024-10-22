@@ -46,7 +46,6 @@ window.onload = function () {
     );
 
     if (!form.checkValidity()) {
-      console.log("gggg");
       event.preventDefault();
       event.stopPropagation();
     }

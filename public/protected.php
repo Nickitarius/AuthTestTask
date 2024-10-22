@@ -1,4 +1,4 @@
-<?php require_once '../src/controllers/subscribe.controller.php'; ?>
+<?php require_once '../src/controllers/protected.controller.php'; ?>
 
 <?php view('header', ['pageTitle' => 'Регистрация']) ?>
 

@@ -34,9 +34,11 @@ export function validatePasswords(
     errorMessage = "Пароли не совпадают!";
   }
 
-  if (passwordError && repeatPasswordError) {
+  if (passwordError) {
     passwordError.innerHTML = errorMessage;
-    repeatPasswordError.innerHTML = errorMessage;
+  }
+  if (repeatPasswordError) {
+    repeatPasswordError = errorMessage;
   }
 }
 
@@ -48,3 +50,23 @@ export function validateEmail(email, emailError) {
     emailError.innerHTML = "Электронная почта введена некорректно!";
   }
 }
+
+// export function validatePassword(password, passwordError = null) {
+//   let errorMessage = "";
+//   if (password.value.length >= 8 && password.value.length < 20) {
+//     if (/^[A-Za-z0-9]*$/.test(password.value)) {
+//       password.setCustomValidity("");
+//     } else {
+//       password.setCustomValidity("invalid");
+//       errorMessage =
+//         "Пароль должен содержать только латинские символы и цифры!";
+//     }
+//   } else {
+//     password.setCustomValidity("invalid");
+//     errorMessage = "Пароль должен быть не менее 8 и не более 20 символов!";
+//   }
+
+//   if (passwordError) {
+//     passwordError.innerHTML = errorMessage;
+//   }
+// }
