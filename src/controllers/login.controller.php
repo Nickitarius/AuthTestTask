@@ -33,6 +33,15 @@ if ($request_method == 'POST') {
             logUserIn($user);
             header('Location:' . 'protected.php');
             exit;
+
+            if (filter_has_var(INPUT_POST, 'remember-me')) {
+                $rememberMe = filter_input(INPUT_POST, 'remember-me', FILTER_SANITIZE_STRING);
+                if ($rememberMe) {
+                    rememberMe($user['id'], 30);
+                }
+            }
+        } else {
+            $isError = true;
         }
         // $isPasswordValid = ;
     }
@@ -40,7 +49,7 @@ if ($request_method == 'POST') {
     if ($isError) {
         $_SESSION['error'] = 'Логин или пароль введены неверно!';
 
-        header('Location:' . 'signup');
+        header('Location:' . 'login');
         exit;
     }
 }

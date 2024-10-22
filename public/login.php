@@ -19,7 +19,7 @@
                     unset($_SESSION['error']);
                     ?>
 
-                    <div class="my-5 alert alert-danger" id="flash-message" role="alert">
+                    <div class="my-2 alert alert-danger" id="flash-message" role="alert">
                         <?php echo $isError; ?>
                     </div>
                 <?php endif; ?>
@@ -45,6 +45,22 @@
                         Пароль заполнен некорректно!
                     </div>
                 </div>
+
+
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="" id="flexCheckDefault" name="remember-me" id="remember-me">
+                    <label class="form-check-label" for="flexCheckDefault">
+                        Запомнить меня
+                    </label>
+                </div>
+
+                <!-- <div>
+                    <label for="remember-me" class="form-check-input">
+                        Запомнить меня
+                    </label>
+                    <input type="checkbox" class="form-check-label" name="remember-me" id="remember-me" value="checked"
+                        <?= $inputs['remember-me'] ?? '' ?> />
+                </div> -->
 
                 <div class="container text-center">
                     <button type="submit" class="btn btn-primary w-100 mt-3">Войти</button>

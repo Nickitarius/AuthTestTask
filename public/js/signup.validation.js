@@ -1,19 +1,24 @@
 import {
   validatePasswords,
   validateEmail,
-} from "./password.validation.util.js";
+  validateUsername,
+} from "./validation.utils.util.js";
 
 window.onload = function () {
   const form = document.getElementById("signup-form");
   const email = document.getElementById("email");
   const password = document.getElementById("password");
   const repeatPassword = document.getElementById("repeat-password");
-  // const username = document.getElementById("username");
+  const username = document.getElementById("username");
 
   const passwordError = document.getElementById("password-error");
   const repeatPasswordError = document.getElementById("repeat-password-error");
   const emailError = document.getElementById("email-error");
-  // const usernameError = document.getElementById("username-error");
+  const usernameError = document.getElementById("username-error");
+
+  username.addEventListener("input", (event) => {
+    validateUsername(username, usernameError);
+  });
 
   email.addEventListener("input", (event) => {
     validateEmail(email, emailError);

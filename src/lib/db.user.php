@@ -7,7 +7,7 @@ $db = getDBConnection();
 class UserActions
 {
 
-    public static function register_user(string $email, string $username, string $password): bool
+    public static function registerUser(string $email, string $username, string $password): bool
     {
         global $db;
         try {
@@ -70,8 +70,69 @@ class UserActions
         }
     }
 
-    public static function getUserByUsernameAndPassword($username, $password)
+    public static function insertUserToken(int $userId, string $selector, string $hashedValidator, string $expiry): bool
     {
+        global $db;
+        $sql = 'INSERT INTO user_tokens(user_id, selector, hashed_validator, expiry)
+            VALUES(:user_id, :selector, :hashed_validator, :expiry)';
 
+        $statement = $db->prepare($sql);
+        $statement->bindValue(':user_id', $userId);
+        $statement->bindValue(':selector', $selector);
+        $statement->bindValue(':hashed_validator', $hashedValidator);
+        $statement->bindValue(':expiry', $expiry);
+
+        return $statement->execute();
+    }
+
+    public static function findUserTokenBySelector(string $selector)
+    {
+        global $db;
+        $sql = 'SELECT id, selector, hashed_validator, user_id, expiry
+                FROM user_tokens
+                WHERE selector = :selector AND
+                    expiry >= now()
+                LIMIT 1';
+
+        $statement = $db->prepare($sql);
+        $statement->bindValue(':selector', $selector);
+
+        $statement->execute();
+
+        return $statement->fetch(PDO::FETCH_ASSOC);
+    }
+
+    public static function deleteAllTokensOfUser(int $userId): bool
+    {
+        global $db;
+        $sql = 'DELETE FROM user_tokens WHERE user_id = :user_id';
+        $statement = $db->prepare($sql);
+        $statement->bindValue(':user_id', $userId);
+
+        return $statement->execute();
+    }
+
+    public static function findUserByToken(string $token)
+    {
+        global $db;
+        $tokens = parseToken($token);
+
+        if (!$tokens) {
+            return null;
+        }
+
+        $sql = 'SELECT users.id, username
+            FROM users
+            INNER JOIN user_tokens ON user_id = users.id
+            WHERE selector = :selector AND
+                expiry > now()
+            LIMIT 1';
+
+        $statement = $db->prepare($sql);
+        $statement->bindValue(':selector', $tokens[0]);
+        $statement->execute();
+
+        return $statement->fetch(PDO::FETCH_ASSOC);
     }
 }
+
