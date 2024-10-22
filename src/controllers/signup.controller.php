@@ -1,6 +1,7 @@
 <?php
 
-require '../src/bootstrap.php';
+require_once '../src/bootstrap.php';
+require_once '../src/lib/db.user.php';
 
 $request_method = strtoupper($_SERVER['REQUEST_METHOD']);
 
@@ -15,10 +16,18 @@ if ($request_method == 'POST') {
     if (filter_has_var(INPUT_POST, 'username') && !empty($_POST['username'])) {
         $username = htmlspecialchars($_POST['username']);
         $username = trim($username);
-        if (!preg_match(USERNAME_VALIDATION_REGEX, $username)) {
+        if (preg_match(USERNAME_VALIDATION_REGEX, $username)) {
+            $isUsernameExists = UserActions::isUsernameExists($username);
+            $_SESSION['uf'] = $isUsernameExists;
+
+            if ($isUsernameExists) {
+                $errors['username'] = 'Имя пользователя занято!';
+            }
+        } else {
             $errors['username'] = 'Логин может содержать только латинские символы и
             цифры и иметь длину от 1 до 20 символов!';
         }
+
     } else {
         $errors['username'] = 'Логин не может быть пустым!';
     }
@@ -28,7 +37,12 @@ if ($request_method == 'POST') {
     if (filter_has_var(INPUT_POST, 'email') && !empty($_POST['email'])) {
         $email = filter_input(INPUT_POST, 'email', FILTER_SANITIZE_EMAIL);
         $email = strtolower($email);
-        if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
+        if (filter_var($email, FILTER_VALIDATE_EMAIL)) {
+            $isEmailExists = UserActions::isEmailExists($email);
+            if ($isEmailExists) {
+                $errors['email'] = 'Эта электронная почта уже занята!';
+            }
+        } else {
             $errors['email'] = 'Электронная почта введена некорректно!';
         }
     } else {
@@ -68,12 +82,24 @@ if ($request_method == 'POST') {
     } else {
         //Register the new user
 
-        $passwordHash = password_hash($password, PASSWORD_DEFAULT);
+        $isSignupSuccess = UserActions::register_user($email, $username, $password);
+        if ($isSignupSuccess) {
+            $_SESSION['flash_message']['text'] = 'Регистрация прошла успешно!';
+            $_SESSION['flash_message']['type'] = 'success';
 
-        $_SESSION['flash_message']['text'] = 'Регистрация прошла успешно!';
-        $_SESSION['flash_message']['type'] = 'success';
+            header('Location:' . 'subscribe');
+            exit;
+        } else {
+            $_SESSION['flash_message']['text'] = "Что-то пошло не так! Обратитесь к разработчику!";
+            $_SESSION['flash_message']['type'] = 'danger';
 
-        header('Location:' . 'subscribe');
-        exit;
+            $_SESSION['errors'] = $errors;
+            $_SESSION['inputs'] = $inputs;
+
+            header('Location:' . 'signup');
+            exit;
+        }
+
+
     }
 }

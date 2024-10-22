@@ -26,6 +26,8 @@
                     $inputs = $_SESSION['inputs'];
                     unset($_SESSION['inputs']);
                 }
+
+                print_r($_SESSION['uf']);
                 ?>
 
                 <div>

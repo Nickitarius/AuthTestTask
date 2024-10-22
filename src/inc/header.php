@@ -59,7 +59,7 @@
             unset($_SESSION['flash_message']);
             ?>
 
-            <div class="alert alert-<?php echo $flashType; ?>" id="flash-message" role="alert">
+            <div class="my-5 alert alert-<?php echo $flashType; ?>" id="flash-message" role="alert">
                 <?php echo $flashText; ?>
             </div>
         <?php endif; ?>
