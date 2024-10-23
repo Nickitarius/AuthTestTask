@@ -43,7 +43,6 @@ if ($request_method == 'POST') {
         } else {
             $isError = true;
         }
-        // $isPasswordValid = ;
     }
 
     if ($isError) {

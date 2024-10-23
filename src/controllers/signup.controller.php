@@ -90,8 +90,18 @@ if ($request_method == 'POST') {
             $_SESSION['flash_message']['text'] = 'Регистрация прошла успешно!';
             $_SESSION['flash_message']['type'] = 'success';
 
-            header('Location:' . 'login');
-            exit;
+            $user = UserActions::getUserByUsername($username);
+            if (password_verify($password, $user['password'])) {
+                logUserIn($user);
+                header('Location:' . 'protected.php');
+                exit;
+            } else {
+                $isError = true;
+            }
+
+
+            // header('Location:' . 'protected.php');
+            // exit;
         } else {
             $_SESSION['flash_message']['text'] = "Что-то пошло не так! Обратитесь к разработчику!";
             $_SESSION['flash_message']['type'] = 'danger';
