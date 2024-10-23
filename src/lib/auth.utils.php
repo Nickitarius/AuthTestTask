@@ -1,6 +1,7 @@
 <?php
 
 include_once '../src/lib/db.user.php';
+include_once '../src/lib/remember.me.php';
 
 function logUserIn($user)
 {

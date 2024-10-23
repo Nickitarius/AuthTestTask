@@ -31,15 +31,14 @@ if ($request_method == 'POST') {
         $user = UserActions::getUserByUsername($username);
         if (password_verify($password, $user['password'])) {
             logUserIn($user);
-            header('Location:' . 'protected.php');
-            exit;
-
             if (filter_has_var(INPUT_POST, 'remember-me')) {
-                $rememberMe = filter_input(INPUT_POST, 'remember-me', FILTER_SANITIZE_STRING);
+                $rememberMe = filter_input(INPUT_POST, 'remember-me', FILTER_UNSAFE_RAW);
                 if ($rememberMe) {
                     rememberMe($user['id'], 30);
                 }
             }
+            header('Location:' . 'protected.php');
+            exit;
         } else {
             $isError = true;
         }
