@@ -29,13 +29,13 @@
             </button>
 
             <div class="collapse navbar-collapse" id="navbarSupportedContent">
+
                 <ul class="navbar-nav me-auto mb-2 mb-lg-0">
-                    <!-- <li class="nav-item">
-                        <span class="nav-link">GOY</span>
-                    </li>
-                    <li class="nav-item">
-                        <span class="nav-link">DA</span>
-                    </li> -->
+                    <?php if (isLoggedIn()): ?>
+                        <li class="nav-item">
+                            <a class="nav-link" href="/protected">Внутренняя страница</a>
+                        </li>
+                    <?php endif; ?>
                 </ul>
 
                 <?php if (isLoggedIn()): ?>
