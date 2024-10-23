@@ -34,15 +34,17 @@ function token_is_valid(string $token): bool
 
 function rememberMe(int $userId, int $daysToExpire = 30)
 {
+    echo 'rememberMe called';
+
     [$selector, $validator, $token] = generateTokens();
 
-    // remove all existing token associated with the user id
+    // Remove all existing tokens associated with the user id
     UserActions::deleteAllTokensOfUser($userId);
 
-    // set expiration date
+    // Set expiration date
     $expiredSeconds = time() + 60 * 60 * 24 * $daysToExpire;
 
-    // insert a token to the database
+    // Insert a token to the database
     $hashValidator = password_hash($validator, PASSWORD_DEFAULT);
     $expiry = date('Y-m-d H:i:s', $expiredSeconds);
 

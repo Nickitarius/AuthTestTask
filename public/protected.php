@@ -4,7 +4,10 @@
 
 <div>
 
-   
+    <?php
+    echo $_SESSION['t']
+        ?>
+
     <p><?php
     if (isset($_SESSION['uf'])) {
         echo $_SESSION['uf'];
@@ -14,6 +17,6 @@
 
 
 
-</div> 
+</div>
 
 <?php view('footer'); ?>
