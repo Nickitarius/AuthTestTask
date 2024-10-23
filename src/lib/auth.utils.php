@@ -1,16 +1,37 @@
 <?php
 
+include_once '../src/lib/db.user.php';
+
 function logUserIn($user)
 {
-    session_regenerate_id();
 
-    $_SESSION['username'] = $user['username'];
-    $_SESSION['user_id'] = $user['id'];
+    if (session_regenerate_id()) {
+        $_SESSION['username'] = $user['username'];
+        $_SESSION['user_id'] = $user['id'];
+
+        return true;
+    }
+
+    return false;
 }
 
 function isLoggedIn()
 {
-    return isset($_SESSION['username']);
+    if (isset($_SESSION['username'])) {
+        return true;
+    }
+
+    $token = filter_input(INPUT_COOKIE, 'remember_me', FILTER_UNSAFE_RAW);
+
+    if ($token && token_is_valid($token)) {
+
+        $user = UserActions::findUserByToken($token);
+
+        if ($user) {
+            return logUserIn($user);
+        }
+    }
+    return false;
 }
 
 function requireLogin(): void
@@ -24,7 +45,15 @@ function requireLogin(): void
 function logout(): void
 {
     if (isLoggedIn()) {
+        UserActions::deleteAllTokensOfUser($_SESSION['user_id']);
+
         unset($_SESSION['username'], $_SESSION['user_id']);
+
+        if (isset($_COOKIE['remember_me'])) {
+            unset($_COOKIE['remember_me']);
+            setcookie('remember_user', null, -1);
+        }
+
         session_destroy();
         header('Location:' . 'login');
         exit;

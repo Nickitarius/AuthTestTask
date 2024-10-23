@@ -21,7 +21,7 @@ if ($request_method == 'POST') {
             if (!empty($user)) {
                 $errors['username'] = 'Имя пользователя занято!';
             } else {
-                $errors['username'] = '';
+                // $errors['username'] = '';
             }
         } else {
             $errors['username'] = 'Логин может содержать только латинские символы и
@@ -42,7 +42,7 @@ if ($request_method == 'POST') {
             if ($isEmailExists) {
                 $errors['email'] = 'Эта электронная почта уже занята!';
             } else {
-                $errors['email'] = '';
+                // $errors['email'] = '';
             }
         } else {
             $errors['email'] = 'Электронная почта введена некорректно!';
@@ -64,7 +64,7 @@ if ($request_method == 'POST') {
                 if (mb_strlen($password) < 8 || mb_strlen($password) > 20) {
                     $errors['password'] = 'Пароль должен быть не менее 8 и не более 20 символов!';
                 } else {
-                    $errors['password'] = '';
+                    // $errors['password'] = '';
                 }
             } else {
                 $errors['password'] = 'Пароль должен содержать только латинские символы и цифры!';
@@ -85,13 +85,23 @@ if ($request_method == 'POST') {
         exit;
     } else {
         //Register the new user
-        $isSignupSuccess = UserActions::register_user($email, $username, $password);
+        $isSignupSuccess = UserActions::registerUser($email, $username, $password);
         if ($isSignupSuccess) {
             $_SESSION['flash_message']['text'] = 'Регистрация прошла успешно!';
             $_SESSION['flash_message']['type'] = 'success';
 
-            header('Location:' . 'login');
-            exit;
+            $user = UserActions::getUserByUsername($username);
+            if (password_verify($password, $user['password'])) {
+                logUserIn($user);
+                header('Location:' . 'protected.php');
+                exit;
+            } else {
+                $isError = true;
+            }
+
+
+            // header('Location:' . 'protected.php');
+            // exit;
         } else {
             $_SESSION['flash_message']['text'] = "Что-то пошло не так! Обратитесь к разработчику!";
             $_SESSION['flash_message']['type'] = 'danger';
