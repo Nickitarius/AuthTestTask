@@ -93,15 +93,17 @@ if ($request_method == 'POST') {
             $user = UserActions::getUserByUsername($username);
             if (password_verify($password, $user['password'])) {
                 logUserIn($user);
+                if (filter_has_var(INPUT_POST, 'remember-me')) {
+                    $rememberMe = filter_input(INPUT_POST, 'remember-me', FILTER_UNSAFE_RAW);
+                    if ($rememberMe) {
+                        rememberMe($user['id'], 30);
+                    }
+                }
                 header('Location:' . 'protected.php');
                 exit;
             } else {
                 $isError = true;
             }
-
-
-            // header('Location:' . 'protected.php');
-            // exit;
         } else {
             $_SESSION['flash_message']['text'] = "Что-то пошло не так! Обратитесь к разработчику!";
             $_SESSION['flash_message']['type'] = 'danger';

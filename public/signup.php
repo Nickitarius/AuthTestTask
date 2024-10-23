@@ -95,6 +95,13 @@
                         должен быть не менее 8 символов.</small>
                 </div>
 
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" value="yes" name="remember-me" id="remember-me">
+                    <label class="form-check-label" for="remember-me">
+                        Запомнить меня
+                    </label>
+                </div>
+
                 <div class="container text-center">
                     <button type="submit" class="btn btn-primary w-100 mt-3">Создать учётную запись</button>
                 </div>

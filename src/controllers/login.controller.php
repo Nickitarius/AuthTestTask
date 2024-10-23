@@ -35,8 +35,6 @@ if ($request_method == 'POST') {
                 $rememberMe = filter_input(INPUT_POST, 'remember-me', FILTER_UNSAFE_RAW);
                 if ($rememberMe) {
                     rememberMe($user['id'], 30);
-                } else {
-                    $_SESSION['t'] = 'chizh';
                 }
             }
             header('Location:' . 'protected.php');
